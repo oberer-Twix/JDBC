@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.RadController">
+    <children>
+        <TableView fx:id="tableViewRaeder" layoutX="20.0" layoutY="20.0" prefHeight="400.0" prefWidth="960.0">
+            <columns>
+                <TableColumn fx:id="tvRaederID" prefWidth="36.79998779296875" text="ID"/>
+                <TableColumn fx:id="tvRaederMarke" prefWidth="188.8000144958496" text="Marke"/>
+                <TableColumn fx:id="tvRaederName" prefWidth="180.00001525878906" text="Name"/>
+                <TableColumn fx:id="tvRaederGroese" prefWidth="82.39996337890625" text="Größe"/>
+                <TableColumn fx:id="tvRaederLager" prefWidth="244.0" text="Lager"/>
+                <TableColumn fx:id="tvRaederPreis" prefWidth="228.800048828125" text="Kaufpreis"/>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

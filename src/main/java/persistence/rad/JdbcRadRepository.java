@@ -65,11 +65,18 @@ public record JdbcRadRepository(Connection connection) implements RadRepository 
         if (rad.getRadID() != null) {
             throw new IllegalArgumentException("Rad hat bereits eine ID");
         }
-        try (var statement = connection.prepareStatement(JdbcRadRepositoryParser.getSqlForInsert()
+        String sql;
+        if (rad.getRadLager().isPresent()){
+            sql = JdbcRadRepositoryParser.getSqlForInsert();
+        }else {
+            sql = JdbcRadRepositoryParser.getSqlForInsertWithoutLager();
+        }
+        try (var statement = connection.prepareStatement(sql
                 , Statement.RETURN_GENERATED_KEYS)) {
-            return saveRad(rad, statement); //todo saveRad von parser verschoben
+            return saveRad(rad, statement);
         }
     }
+
 
     @Override
     public void delete(int id) throws SQLException {
@@ -120,7 +127,9 @@ public record JdbcRadRepository(Connection connection) implements RadRepository 
         statement.setString(2, rad.getRadGroese().getFirstLetterAsString());
         statement.setString(3, rad.getRadMarke());
         statement.setInt(4, rad.getRadKaufpreis());
-        statement.setInt(5, rad.getRadLager().getLagerID());
+        if(rad.getRadLager().isPresent()){
+            statement.setInt(5, rad.getRadLager().get().getLagerID());
+        }
         statement.executeUpdate();
         var key = statement.getGeneratedKeys();
         if (key.next()) {

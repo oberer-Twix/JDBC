@@ -3,6 +3,8 @@ package domain;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -41,7 +43,7 @@ public class RadTest {
 
         @Test
         public void to_long_String_as_Groese(){
-            assertThatThrownBy(() -> new Rad(1,"name", "Lange", "Marke", 1234, lager));
+            assertThatThrownBy(() -> new Rad(1,"name", "Large", "Marke", 1234, lager));
         }
 
         @Test
@@ -55,7 +57,7 @@ public class RadTest {
     @Test
     void toString_works(){
         var rad = new Rad(1, "name", "M", "KTM", 1234, lager);
-        assertThat(rad.toString()).isEqualTo("Rad(radID=1, radName=name, radGroese=MEDIUM, radMarke=KTM, radKaufpreis=1234, radLager=name)");
+        assertThat(rad.toString()).isEqualTo("Rad(radID=1, radName=name, radGroese=MEDIUM, radMarke=KTM, radKaufpreis=1234, radLager=Optional[name])");
     }
 
     @Nested
@@ -93,7 +95,7 @@ public class RadTest {
 
         @Test
         void lager_Setter() {
-            var newLager = new Lager(1, "lager");
+            var newLager = Optional.of(new Lager(1, "lager"));
             rad.setRadLager(newLager);
             assertThat(rad.getRadLager()).isEqualTo(newLager);
         }

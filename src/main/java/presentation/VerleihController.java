@@ -5,89 +5,74 @@ import domain.Mitarbeiter;
 import domain.Rad;
 import domain.Verleih;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+import persistence.ConnectionManager;
 import persistence.kunde.JdbcKundeRepository;
 import persistence.rad.JdbcRadRepository;
+import persistence.verleih.JdbcVerleihRepository;
 import persistence.verleih.VerleihRepository;
 
+import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
-public class VerleihController {
-    private final VerleihRepository verleihRepository;
-    private final JdbcRadRepository radRepository;
-    private final Controller controller;
-    private final JdbcKundeRepository kundeRepository;
-    private final AnchorPane tabVerleih;
-    private final TableView<Verleih> tableVerleih;
-    private final TableColumn<Verleih, Integer> tvVerleihID;
-    private final TableColumn<Verleih, String> tvVerleihKunde;
-    private final TableColumn<Verleih, LocalDate> tvVerleihDatum;
-    private final TableColumn<Verleih, Integer> tvVerleihDauer;
-    private final TableColumn<Verleih, Double> tvVerleihPreis;
-    private final TableColumn<Verleih, String> tvVerleihRad;
-    private final TableColumn<Verleih, String> tvVerleihZusatzTools;
-    private final ChoiceBox<Kunde> verleihKundenChoiceBox;
-    private final DatePicker verleihDatum;
-    private final TextField verleihDauerTF;
-    private final TextField verleihPreisTF;
-    private final TableView<Rad> verleihRadTableView;
-    private final TableColumn<Rad, String> verleihTVName;
-    private final TableColumn<Rad, String> verleihTVGroese;
-    private final TableColumn<Rad, String> verleihTVMarke;
-    private final TextField verleihZusatzToolsTF;
-    private final Button verleihButtonSubmit;
+public class VerleihController implements Initializable, Updatable {
+    private VerleihRepository verleihRepository;
+    private JdbcRadRepository radRepository;
+    private JdbcKundeRepository kundeRepository;
+    @FXML
+    private TableView<Verleih> tableVerleih;
+    @FXML
+    private TableColumn<Verleih, Integer> tvVerleihID;
+    @FXML
+    private TableColumn<Verleih, String> tvVerleihKunde;
+    @FXML
+    private TableColumn<Verleih, LocalDate> tvVerleihDatum;
+    @FXML
+    private TableColumn<Verleih, Integer> tvVerleihDauer;
+    @FXML
+    private TableColumn<Verleih, Double> tvVerleihPreis;
+    @FXML
+    private TableColumn<Verleih, String> tvVerleihRad;
+    @FXML
+    private TableColumn<Verleih, String> tvVerleihZusatzTools;
+    @FXML
+    private ChoiceBox<Kunde> verleihKundenChoiceBox;
+    @FXML
+    private DatePicker verleihDatum;
+    @FXML
+    private TextField verleihDauerTF;
+    @FXML
+    private TextField verleihPreisTF;
+    @FXML
+    private TableView<Rad> verleihRadTableView;
+    @FXML
+    private TableColumn<Rad, String> verleihTVName;
+    @FXML
+    private TableColumn<Rad, String> verleihTVGroese;
+    @FXML
+    private TableColumn<Rad, String> verleihTVMarke;
+    @FXML
+    private TextField verleihZusatzToolsTF;
+    @FXML
+    private Button verleihButtonSubmit;
 
-    public VerleihController(
-            VerleihRepository verleihRepository,
-            JdbcRadRepository radRepository,
-            Controller controller,
-            JdbcKundeRepository kundeRepository,
-            AnchorPane tabVerleih,
-            TableView<Verleih> tableVerleih,
-            TableColumn<Verleih, Integer> tvVerleihID,
-            TableColumn<Verleih, String> tvVerleihKunde,
-            TableColumn<Verleih, LocalDate> tvVerleihDatum,
-            TableColumn<Verleih, Integer> tvVerleihDauer,
-            TableColumn<Verleih, Double> tvVerleihPreis,
-            TableColumn<Verleih, String> tvVerleihRad,
-            TableColumn<Verleih, String> tvVerleihZusatzTools,
-            ChoiceBox<Kunde> verleihKundenChoiceBox,
-            DatePicker verleihDatum,
-            TextField verleihDauerTF,
-            TextField verleihPreisTF,
-            TableView<Rad> verleihRadTableView,
-            TableColumn<Rad, String> verleihTVName,
-            TableColumn<Rad, String> verleihTVGroese,
-            TableColumn<Rad, String> verleihTVMarke,
-            TextField verleihZusatzToolsTF,
-            Button verleihButtonSubmit) {
-
-        this.verleihRepository = verleihRepository;
-        this.radRepository = radRepository;
-        this.controller = controller;
-        this.kundeRepository = kundeRepository;
-        this.tabVerleih = tabVerleih;
-        this.tableVerleih = tableVerleih;
-        this.tvVerleihID = tvVerleihID;
-        this.tvVerleihKunde = tvVerleihKunde;
-        this.tvVerleihDatum = tvVerleihDatum;
-        this.tvVerleihDauer = tvVerleihDauer;
-        this.tvVerleihPreis = tvVerleihPreis;
-        this.tvVerleihRad = tvVerleihRad;
-        this.tvVerleihZusatzTools = tvVerleihZusatzTools;
-        this.verleihKundenChoiceBox = verleihKundenChoiceBox;
-        this.verleihDatum = verleihDatum;
-        this.verleihDauerTF = verleihDauerTF;
-        this.verleihPreisTF = verleihPreisTF;
-        this.verleihRadTableView = verleihRadTableView;
-        this.verleihTVName = verleihTVName;
-        this.verleihTVGroese = verleihTVGroese;
-        this.verleihTVMarke = verleihTVMarke;
-        this.verleihZusatzToolsTF = verleihZusatzToolsTF;
-        this.verleihButtonSubmit = verleihButtonSubmit;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Connection connection = null;
+        try {
+            connection = ConnectionManager.getInstance();
+        } catch (SQLException e) {
+            Controller.alert("Verbindung zu Datenbank konnte nicht hergestellt werden \n" + e.getMessage());
+        }
+        radRepository = new JdbcRadRepository(connection);
+        verleihRepository = new JdbcVerleihRepository(connection);
+        kundeRepository = new JdbcKundeRepository(connection);
 
         tvVerleihID.setCellValueFactory(new PropertyValueFactory<>("verleihID"));
         tvVerleihKunde.setCellValueFactory(new PropertyValueFactory<>("verleihKunde"));
@@ -103,6 +88,9 @@ public class VerleihController {
 
         verleihButtonSubmit.setOnAction(actionEvent -> submit());
         verleihRadTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        Controller.addToUpdateList(this);
+        update();
     }
 
     private void submit() {
@@ -150,7 +138,7 @@ public class VerleihController {
         } catch (SQLException e) {
             Controller.alert("Etwas ist schief gelaufen\n" + e.getMessage());
         }
-        controller.update();
+        Controller.update();
     }
 
     private String getRaeder(Verleih item){
@@ -186,5 +174,14 @@ public class VerleihController {
         verleihKundenChoiceBox.getSelectionModel().selectFirst();
         verleihDatum.setValue(LocalDate.now());
         verleihRadTableView.getSelectionModel().selectFirst();
+    }
+
+    @Override
+    public void update() {
+        try {
+            fillTable();
+        } catch (SQLException e) {
+            Controller.alert("Ups. Etwas ist schief gelaufen");
+        }
     }
 }

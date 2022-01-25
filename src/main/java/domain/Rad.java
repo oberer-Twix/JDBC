@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Optional;
+
 @Getter
 @ToString
 public class Rad {
@@ -17,10 +19,10 @@ public class Rad {
     @Setter
     private int radKaufpreis;
     @Setter
-    private Lager radLager;
+    private Optional<Lager> radLager;
 
 
-    public Rad(Integer radID, String radName, char radGroese, String radMarke, int radKaufpreis, Lager radLager) {
+    public Rad(Integer radID, String radName, char radGroese, String radMarke, int radKaufpreis, Optional<Lager> radLager) {
         if(radName.isBlank()){
             throw new IllegalArgumentException("Name des Rades ist unbekannt");
         }
@@ -48,8 +50,24 @@ public class Rad {
         this(null, radName, radGroese, radMarke, radKaufpreis, radLager);
     }
 
+    public Rad(Integer radID, String radName, char radGroese, String radMarke, int radKaufpreis, Lager radLager) {
+        this(radID, radName, radGroese, radMarke, radKaufpreis, Optional.of(radLager));
+    }
+
     public Rad(Integer radID, String radName, String radGroese, String radMarke, int radKaufpreis, Lager radLager) {
+        this(radID, radName, getCorrectCharForGroese(radGroese), radMarke, radKaufpreis, Optional.of(radLager));
+    }
+
+    public Rad(Integer radID, String radName, String radGroese, String radMarke, int radKaufpreis, Optional<Lager> radLager) {
         this(radID, radName, getCorrectCharForGroese(radGroese), radMarke, radKaufpreis, radLager);
+    }
+
+    public Rad(Integer radID, String radName, char radGroese, String radMarke, int radKaufpreis) {
+        this(radID, radName, radGroese, radMarke, radKaufpreis, Optional.empty());
+    }
+
+    public Rad(String name, char groese, String marke, int radKaufpreis) {
+        this(null, name, groese, marke, radKaufpreis);
     }
 
     private static char getCorrectCharForGroese(String radGroese) {

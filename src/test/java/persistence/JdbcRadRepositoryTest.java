@@ -15,9 +15,9 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class JdbcRadRepositoryTest {
     private static Connection connection;
@@ -160,6 +160,14 @@ public class JdbcRadRepositoryTest {
             assertThat(rad1.getRadID()).isNotNull();
             assertThat(radRepository.findByID(rad1.getRadID()).orElseThrow()).isEqualTo(rad1);
         }
+
+        @Test
+        public void works_without_Lager() throws SQLException {
+            var rad = new Rad("name", 'M', "marke", 1234);
+            var rad1 = radRepository.save(rad);
+            assertThat(rad1.getRadID()).isNotNull();
+            assertThat(radRepository.findByID(rad1.getRadID())).isEqualTo(Optional.of(rad1));
+        }
     }
 
     @Nested
@@ -182,7 +190,7 @@ public class JdbcRadRepositoryTest {
     class storage {
         @Test
         public void take_Rad_out_of_Lager() throws SQLException {
-            var rad = new Rad(1, "name", 'M', "marke", 1234, null);
+            var rad = new Rad(1, "name", 'M', "marke", 1234);
             radRepository.withdraw(rad.getRadID());
             assertThat(radRepository.findAllInLager())
                     .extracting(Rad::getRadID)

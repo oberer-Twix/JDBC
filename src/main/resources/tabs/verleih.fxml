@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.VerleihController">
+    <children>
+        <TableView fx:id="tableVerleih" layoutX="20.0" layoutY="20.0" prefHeight="300.0" prefWidth="960.0">
+            <columns>
+                <TableColumn fx:id="tvVerleihID" prefWidth="40.0" text="ID" />
+                <TableColumn fx:id="tvVerleihKunde" prefWidth="140.0" text="Kunde" />
+                <TableColumn fx:id="tvVerleihDatum" prefWidth="145.0" text="Datum" />
+                <TableColumn fx:id="tvVerleihDauer" text="Dauer" />
+                <TableColumn fx:id="tvVerleihPreis" prefWidth="130.0" text="Preis" />
+                <TableColumn fx:id="tvVerleihRad" prefWidth="230.0" text="Rad" />
+                <TableColumn fx:id="tvVerleihZusatzTools" prefWidth="190.0" text="Zusätzliche Tools" />
+            </columns>
+        </TableView>
+        <TextField fx:id="verleihZusatzToolsTF" layoutX="786.0" layoutY="340.0" prefWidth="190.0" />
+        <ChoiceBox fx:id="verleihKundenChoiceBox" layoutX="20.0" layoutY="340.0" prefHeight="26.0" prefWidth="180.0" />
+        <DatePicker fx:id="verleihDatum" layoutX="200.0" layoutY="340.0" prefWidth="145.0" />
+        <TextField fx:id="verleihDauerTF" layoutX="346.0" layoutY="340.0" prefHeight="26.0" prefWidth="80.0" />
+        <TextField fx:id="verleihPreisTF" layoutX="426.0" layoutY="340.0" prefWidth="130.0" />
+        <TableView fx:id="verleihRadTableView" layoutX="556.0" layoutY="340.0" prefHeight="200.0" prefWidth="230.0">
+            <columns>
+                <TableColumn fx:id="verleihTVName" prefWidth="85.60003662109375" text="Name" />
+                <TableColumn fx:id="verleihTVGroese" prefWidth="52.79998779296875" text="Größe" />
+                <TableColumn fx:id="verleihTVMarke" prefWidth="84.79998779296875" text="Marke" />
+            </columns>
+        </TableView>
+        <Button fx:id="verleihButtonSubmit" layoutX="20.0" layoutY="519.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="526.0" text="Submit" />
+    </children>
+</AnchorPane>

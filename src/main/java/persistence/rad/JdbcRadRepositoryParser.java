@@ -30,19 +30,13 @@ public class JdbcRadRepositoryParser {
     }
 
     public static Optional<Rad> getRadFromResultSet(ResultSet resultSet, Optional<Lager> optionalLager) throws SQLException {
-        Lager lager;
-        if(optionalLager.isPresent()){//todo mögl fehler vorher mit null verglichen
-            lager = optionalLager.orElseThrow();
-        }else{
-            lager = null;
-        }
         return Optional.of(new Rad(
                 resultSet.getInt("Rad_ID"),
                 resultSet.getString("Rad_name"),
                 resultSet.getString("Rad_groese"),
                 resultSet.getString("Rad_marke"),
                 resultSet.getInt("Rad_Kaufpreis"),
-                lager));
+                optionalLager));
     }
 
     public static String getSqlForSelectWithLagerID(){
@@ -71,10 +65,19 @@ public class JdbcRadRepositoryParser {
 
     public static String getSqlForInsert(){
         return """
-                insert 
+                insert
                 into Rad
                 (""" + COLUMNS_WITHOUT_ID + """
                 ) values (?, ?, ?, ?, ?);
+                """;
+    }
+
+    public static String getSqlForInsertWithoutLager(){
+        return """
+                insert
+                into Rad
+                (""" + COLUMNS_WITHOUT_ID + """
+                ) values (?, ?, ?, ?, null);
                 """;
     }
 
@@ -125,9 +128,9 @@ public class JdbcRadRepositoryParser {
     public static Optional<Lager> getLagerWithLagerID(ResultSet resultSet, Connection connection) throws SQLException {
         var lagerRepository = new JdbcLagerRepository(connection);
         var lagerID = resultSet.getInt("Rad_Lager");
-        /*if(lagerID == 0){
-            return Optional.empty(); /-/to do null mit OPtional empty ersetzt
-        }*/
+        if(lagerID == 0){
+            return Optional.empty();
+        }
         return lagerRepository.findByID(lagerID);
     }
 
