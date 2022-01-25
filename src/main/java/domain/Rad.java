@@ -21,6 +21,9 @@ public class Rad {
     @Setter
     private Optional<Lager> radLager;
 
+    public Optional<Lager> getRadLager() {
+        return radLager;
+    }
 
     public Rad(Integer radID, String radName, char radGroese, String radMarke, int radKaufpreis, Optional<Lager> radLager) {
         if(radName.isBlank()){
@@ -90,5 +93,12 @@ public class Rad {
     @Override
     public int hashCode() {
         return radID != null ? radID.hashCode() : 0;
+    }
+
+    public String getRadLagerString(){
+        if(radLager.isPresent()){
+            return radLager.get().getLagerName();
+        }
+        return "";
     }
 }

@@ -46,7 +46,7 @@ public class RadController implements Initializable, Updatable {
 
         tvRaederID.setCellValueFactory(new PropertyValueFactory<>("radID"));
         tvRaederGroese.setCellValueFactory(new PropertyValueFactory<>("radGroese"));
-        tvRaederLager.setCellValueFactory(new PropertyValueFactory<>("radLager"));
+        tvRaederLager.setCellValueFactory(new PropertyValueFactory<>("radLagerString"));
         tvRaederPreis.setCellValueFactory(new PropertyValueFactory<>("radKaufpreis"));
         tvRaederMarke.setCellValueFactory(new PropertyValueFactory<>("radMarke"));
         tvRaederName.setCellValueFactory(new PropertyValueFactory<>("radName"));
